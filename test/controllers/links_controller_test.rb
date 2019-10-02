@@ -23,7 +23,15 @@ class LinksControllerTest < ActionDispatch::IntegrationTest
       post links_url, params: { link: { content: @link.content } }
     end
 
-    assert_redirected_to link_url(assigns[:link])
+    assert_no_difference('Link.count') do
+      assert_redirected_to link_url(assigns[:link])
+    end
+  end
+
+  test 'should not destroy immediatley after create' do
+    post links_url, params: { link: { content: @link.content } }
+    get link_url(@link)
+    assert_response :success
   end
 
   test 'should show link' do
@@ -43,20 +51,20 @@ class LinksControllerTest < ActionDispatch::IntegrationTest
   end
 
   test 'should get edit' do
-    get edit_link_url(@link)
-    assert_response :success
+    assert_raise 'ActionController::RoutingError' do
+      get edit_link_url(@link)
+    end
   end
 
   test 'should update link' do
-    patch link_url(@link), params: { link: { content: @link.content } }
-    assert_redirected_to link_url(@link)
+    assert_raise 'ActionController::RoutingError' do
+      patch link_url(@link), params: { link: { content: @link.content } }
+    end
   end
 
   test 'should destroy link' do
-    assert_difference('Link.count', -1) do
+    assert_raise 'ActionController::RoutingError' do
       delete link_url(@link)
     end
-
-    assert_redirected_to links_url
   end
 end

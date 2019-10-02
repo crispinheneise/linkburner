@@ -1,43 +1,36 @@
-require "application_system_test_case"
+# frozen_string_literal: true
+
+require 'application_system_test_case'
 
 class LinksTest < ApplicationSystemTestCase
   setup do
     @link = links(:one)
   end
 
-  test "visiting the index" do
-    visit links_url
-    assert_selector "h1", text: "Links"
+  test 'creating a Link' do
+    visit root_url
+
+    fill_in 'Content', with: @link.content
+    click_on 'Create Link'
+
+    assert_text 'Link was successfully created'
   end
 
-  test "creating a Link" do
-    visit links_url
-    click_on "New Link"
-
-    fill_in "Content", with: @link.content
-    click_on "Create Link"
-
-    assert_text "Link was successfully created"
-    click_on "Back"
+  test 'visiting a link' do
+    visit link_url(@link)
+    assert_text 'Super secret content'
   end
 
-  test "updating a Link" do
-    visit links_url
-    click_on "Edit", match: :first
+  test 'creating, then viewing a link' do
+    Link.destroy_all
+    visit root_url
 
-    fill_in "Content", with: @link.content
-    click_on "Update Link"
+    fill_in 'Content', with: 'Top secret, eyes only'
+    click_on 'Create Link'
 
-    assert_text "Link was successfully updated"
-    click_on "Back"
-  end
+    assert_text 'Top secret, eyes only'
 
-  test "destroying a Link" do
-    visit links_url
-    page.accept_confirm do
-      click_on "Destroy", match: :first
-    end
-
-    assert_text "Link was successfully destroyed"
+    visit link_url(Link.order(:created_at).first)
+    assert_text 'Top secret, eyes only'
   end
 end
