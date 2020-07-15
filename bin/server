@@ -1,0 +1,4 @@
+#!/bin/bash -i
+bundle install
+yarn
+overmind start -p ${PORT:-5000} -f Procfile.dev
