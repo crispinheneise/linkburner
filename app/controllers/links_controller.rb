@@ -12,7 +12,7 @@ class LinksController < ApplicationController
   # GET /links/1
   # GET /links/1.json
   def show
-    @link.destroy unless flash[:do_not_destroy]
+    @link.destroy unless flash[:just_created] || params[:do_not_destroy]
   end
 
   # GET /links/new
@@ -24,11 +24,11 @@ class LinksController < ApplicationController
   # POST /links.json
   def create
     @link = Link.new(link_params)
-    flash[:do_not_destroy] = true
+    flash[:just_created] = true
 
     respond_to do |format|
       if @link.save
-        format.html { redirect_to @link, notice: 'Link was successfully created.' }
+        format.html { redirect_to @link, notice: 'This link will disappear the next time someone sees it.' }
         format.json { render :show, status: :created, location: @link }
       else
         format.html { render :new }
@@ -42,6 +42,8 @@ class LinksController < ApplicationController
   # Use callbacks to share common setup or constraints between actions.
   def set_link
     @link = Link.find(params[:id])
+  rescue ActiveRecord::RecordNotFound
+    render 'expired'
   end
 
   # Never trust parameters from the scary internet, only allow the white list through.

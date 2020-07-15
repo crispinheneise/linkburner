@@ -31,3 +31,10 @@
 
 en:
   hello: "Hello world"
+
+  links:
+    new:
+      headline: Create a Secret Message
+    form:
+      content_help_text: The secret content that you insert above will be displayed once, and then permanently deleted. Use it to send passwords, secret messages, and any other content that you wish to be seen once and once only.
+      submit: Create Secret Message

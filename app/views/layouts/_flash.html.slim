@@ -1,0 +1,6 @@
+- flash.select{|k,v| %w(notice alert success error welcome recaptcha_error).include?(k)}.each do |type, message|
+  div class=['flash', type, 'will-animate fadeInUp faster']
+    div
+      span class='flash__type will-animate fadeInUp' = type.titleize
+      button class='delete'
+      span class='flash__message'= raw message
