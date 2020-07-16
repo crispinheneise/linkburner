@@ -12,7 +12,7 @@ class LinksController < ApplicationController
   # GET /links/1
   # GET /links/1.json
   def show
-    @link.destroy unless flash[:just_created] || params[:do_not_destroy]
+    @link.destroy unless do_not_destroy
   end
 
   # GET /links/new
@@ -50,4 +50,10 @@ class LinksController < ApplicationController
   def link_params
     params.require(:link).permit(:content)
   end
+
+  def do_not_destroy
+    return true if flash[:just_created] || params[:do_not_destroy]
+    return true if request.env['HTTP_USER_AGENT'] =~ /embed.ly/
+  end
+
 end
